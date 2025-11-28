@@ -4,55 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio Taller de Diseño I y II</title>
-    
-    <!-- Cargamos React y Tailwind CSS desde internet -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Animaciones personalizadas -->
     <style>
+        /* Animaciones simples */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
-    <div id="root"></div>
+    <!-- PANTALLA DE INICIO -->
+    <div id="start-screen" class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center hover:scale-105 transition-transform duration-300">
+            <div class="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-600">
+                <!-- Icon Brain -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.97-3.284"/><path d="M17.97 14.716A4 4 0 0 1 16 18"/><path d="M13 22h-2"/></svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Fundamentos del Diseño</h1>
+            <p class="text-gray-600 mb-8">Repaso interactivo para Taller 1 y 2.</p>
+            
+            <div class="flex justify-center space-x-4 text-sm text-gray-500 mb-8">
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    <span id="total-questions-start">10 Preguntas</span>
+                </div>
+            </div>
 
-    <script type="text/babel">
-        const { useState } = React;
+            <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center group cursor-pointer">
+                Comenzar Quiz
+                <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+        </div>
+    </div>
 
-        // --- ICONOS SVG (Para no depender de librerías externas) ---
-        const IconBrain = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.97-3.284"/><path d="M17.97 14.716A4 4 0 0 1 16 18"/><path d="M13 22h-2"/></svg>
-        );
-        const IconBook = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-        );
-        const IconCheck = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-        );
-        const IconX = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-        );
-        const IconArrowRight = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        );
-        const IconTrophy = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-        );
-        const IconRefresh = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-        );
+    <!-- PANTALLA DEL QUIZ -->
+    <div id="quiz-screen" class="hidden min-h-screen bg-gray-100 flex-col items-center py-10 px-4">
+        <!-- Barra de Progreso -->
+        <div class="w-full max-w-2xl mb-8">
+            <div class="flex justify-between text-sm font-semibold text-gray-500 mb-2">
+                <span id="question-counter">Pregunta 1 de 10</span>
+                <span id="progress-percentage">0% Completado</span>
+            </div>
+            <div class="w-full bg-gray-300 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+            </div>
+        </div>
 
-        // --- DATOS DEL CUESTIONARIO (Taller I y II) ---
+        <!-- Tarjeta de Pregunta -->
+        <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden fade-in">
+            <div class="p-6 md:p-8">
+                <h2 id="question-text" class="text-xl md:text-2xl font-bold text-gray-800 mb-6 leading-tight">
+                    <!-- Pregunta aquí -->
+                </h2>
+
+                <div id="options-container" class="space-y-3">
+                    <!-- Opciones se generan con JS -->
+                </div>
+            </div>
+
+            <!-- Panel de Explicación -->
+            <div id="explanation-panel" class="hidden bg-gray-50 p-6 border-t border-gray-100 fade-in">
+                <div id="feedback-box" class="mb-4 p-4 rounded-lg border">
+                    <p id="feedback-title" class="font-bold mb-1"></p>
+                    <p id="feedback-text" class="text-sm md:text-base opacity-90"></p>
+                </div>
+                
+                <button onclick="nextQuestion()" id="next-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-md transition-colors flex items-center justify-center text-lg cursor-pointer">
+                    Siguiente Pregunta
+                    <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE RESULTADOS -->
+    <div id="result-screen" class="hidden min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center fade-in">
+            <div id="trophy-icon" class="mx-auto mb-6 flex justify-center text-yellow-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Resultados</h2>
+            <p id="result-message" class="text-gray-600 mb-6"></p>
+            
+            <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                <div id="result-percentage" class="text-5xl font-bold text-indigo-600 mb-2">0%</div>
+                <p id="result-detail" class="text-gray-500"></p>
+            </div>
+
+            <button onclick="restartQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition-colors flex items-center justify-center cursor-pointer">
+                <svg class="mr-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                Intentar de nuevo
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // --- DATOS ---
         const questionsData = [
             {
                 id: 1,
@@ -176,211 +228,183 @@
             }
         ];
 
-        // --- COMPONENTE PRINCIPAL ---
-        function App() {
-            const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-            const [selectedOption, setSelectedOption] = useState(null);
-            const [isAnswered, setIsAnswered] = useState(false);
-            const [score, setScore] = useState(0);
-            const [showResult, setShowResult] = useState(false);
-            const [quizStarted, setQuizStarted] = useState(false);
+        // --- ESTADO ---
+        let currentIndex = 0;
+        let score = 0;
+        let isAnswered = false;
 
-            const currentQuestion = questionsData[currentQuestionIndex];
+        // --- REFERENCIAS DOM ---
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const questionCounter = document.getElementById('question-counter');
+        
+        const explanationPanel = document.getElementById('explanation-panel');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
 
-            // Manejar selección
-            const handleOptionClick = (optionId) => {
-                if (isAnswered) return;
-                
-                setSelectedOption(optionId);
-                setIsAnswered(true);
+        // Inicializar texto en pantalla de inicio
+        document.getElementById('total-questions-start').textContent = `${questionsData.length} Preguntas`;
 
-                if (optionId === currentQuestion.correctAnswer) {
-                    setScore(score + 1);
-                }
-            };
+        // --- FUNCIONES ---
 
-            // Siguiente pregunta
-            const handleNextQuestion = () => {
-                if (currentQuestionIndex < questionsData.length - 1) {
-                    setCurrentQuestionIndex(currentQuestionIndex + 1);
-                    setSelectedOption(null);
-                    setIsAnswered(false);
-                } else {
-                    setShowResult(true);
-                }
-            };
-
-            // Reiniciar
-            const handleRestart = () => {
-                setCurrentQuestionIndex(0);
-                setSelectedOption(null);
-                setIsAnswered(false);
-                setScore(0);
-                setShowResult(false);
-                setQuizStarted(false);
-            };
-
-            // 1. Pantalla de Inicio
-            if (!quizStarted) {
-                return (
-                    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center hover:scale-105 transition-transform duration-300">
-                            <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-600">
-                                <IconBrain />
-                            </div>
-                            <h1 className="text-3xl font-bold text-gray-800 mb-2">Fundamentos del Diseño</h1>
-                            <p className="text-gray-600 mb-8">Repaso interactivo para Taller 1 y 2.</p>
-                            
-                            <div className="flex justify-center space-x-4 text-sm text-gray-500 mb-8">
-                                <div className="flex items-center">
-                                    <span className="mr-1"><IconBook /></span>
-                                    <span>{questionsData.length} Preguntas</span>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={() => setQuizStarted(true)}
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center group"
-                            >
-                                Comenzar Quiz
-                                <span className="ml-2 group-hover:translate-x-1 transition-transform"><IconArrowRight /></span>
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
-
-            // 2. Pantalla de Resultados
-            if (showResult) {
-                const percentage = Math.round((score / questionsData.length) * 100);
-                let message = "";
-                if (percentage === 100) message = "¡Excelente! Dominas la teoría.";
-                else if (percentage >= 70) message = "¡Muy bien! Estás listo para defender tu proyecto.";
-                else if (percentage >= 50) message = "Bien, pero repasa los conceptos clave.";
-                else message = "Necesitas releer los apuntes de Taller.";
-
-                return (
-                    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fade-in">
-                            <div className={`mx-auto mb-6 flex justify-center ${percentage >= 70 ? 'text-yellow-500' : 'text-gray-400'}`}>
-                                <div className="w-20 h-20"><IconTrophy /></div>
-                            </div>
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Resultados</h2>
-                            <p className="text-gray-600 mb-6">{message}</p>
-                            
-                            <div className="bg-gray-50 rounded-xl p-6 mb-8">
-                                <div className="text-5xl font-bold text-indigo-600 mb-2">{percentage}%</div>
-                                <p className="text-gray-500">
-                                    Acertaste {score} de {questionsData.length} preguntas
-                                </p>
-                            </div>
-
-                            <button 
-                                onClick={handleRestart}
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition-colors flex items-center justify-center"
-                            >
-                                <span className="mr-2"><IconRefresh /></span>
-                                Intentar de nuevo
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
-
-            // 3. Pantalla del Quiz
-            return (
-                <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4 font-sans">
-                    {/* Barra de Progreso */}
-                    <div className="w-full max-w-2xl mb-8">
-                        <div className="flex justify-between text-sm font-semibold text-gray-500 mb-2">
-                            <span>Pregunta {currentQuestionIndex + 1} de {questionsData.length}</span>
-                            <span>{Math.round(((currentQuestionIndex) / questionsData.length) * 100)}% Completado</span>
-                        </div>
-                        <div className="w-full bg-gray-300 rounded-full h-2.5">
-                            <div 
-                                className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500 ease-out" 
-                                style={{ width: `${((currentQuestionIndex + 1) / questionsData.length) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-
-                    {/* Tarjeta de Pregunta */}
-                    <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden">
-                        <div className="p-6 md:p-8">
-                            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 leading-tight">
-                                {currentQuestion.question}
-                            </h2>
-
-                            <div className="space-y-3">
-                                {currentQuestion.options.map((option) => {
-                                    let buttonStyle = "border-2 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50";
-                                    let icon = null;
-
-                                    if (isAnswered) {
-                                        if (option.id === currentQuestion.correctAnswer) {
-                                            buttonStyle = "bg-green-100 border-green-500 text-green-800";
-                                            icon = <div className="text-green-600"><IconCheck /></div>;
-                                        } else if (option.id === selectedOption) {
-                                            buttonStyle = "bg-red-100 border-red-500 text-red-800";
-                                            icon = <div className="text-red-600"><IconX /></div>;
-                                        } else {
-                                            buttonStyle = "border-gray-100 text-gray-400 opacity-50";
-                                        }
-                                    } else if (selectedOption === option.id) {
-                                        buttonStyle = "border-indigo-600 bg-indigo-50 text-indigo-700";
-                                    }
-
-                                    return (
-                                        <button
-                                            key={option.id}
-                                            onClick={() => handleOptionClick(option.id)}
-                                            disabled={isAnswered}
-                                            className={`w-full text-left p-4 rounded-xl transition-all duration-200 flex justify-between items-center text-base md:text-lg font-medium ${buttonStyle}`}
-                                        >
-                                            <span className="flex items-center">
-                                                <span className={`flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 text-sm font-bold 
-                                                    ${isAnswered && option.id === currentQuestion.correctAnswer ? 'border-green-500 bg-green-500 text-white' : 
-                                                    isAnswered && option.id === selectedOption ? 'border-red-500 bg-red-500 text-white' : 
-                                                    'border-gray-300 text-gray-500'}`}>
-                                                    {option.id.toUpperCase()}
-                                                </span>
-                                                {option.text}
-                                            </span>
-                                            {icon}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* Panel de Explicación */}
-                        {isAnswered && (
-                            <div className="bg-gray-50 p-6 border-t border-gray-100 animate-fade-in">
-                                <div className={`mb-4 p-4 rounded-lg ${selectedOption === currentQuestion.correctAnswer ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-blue-50 text-blue-800 border border-blue-200'}`}>
-                                    <p className="font-bold mb-1">
-                                        {selectedOption === currentQuestion.correctAnswer ? '¡Correcto!' : 'Explicación:'}
-                                    </p>
-                                    <p className="text-sm md:text-base opacity-90">
-                                        {currentQuestion.explanation}
-                                    </p>
-                                </div>
-                                
-                                <button
-                                    onClick={handleNextQuestion}
-                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-md transition-colors flex items-center justify-center text-lg"
-                                >
-                                    {currentQuestionIndex === questionsData.length - 1 ? 'Ver Resultados' : 'Siguiente Pregunta'}
-                                    <span className="ml-2"><IconArrowRight /></span>
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            );
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('flex');
+            loadQuestion();
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        function loadQuestion() {
+            const currentQ = questionsData[currentIndex];
+            isAnswered = false;
+
+            // Resetear UI
+            explanationPanel.classList.add('hidden');
+            optionsContainer.innerHTML = '';
+            
+            // Textos
+            questionText.textContent = currentQ.question;
+            questionCounter.textContent = `Pregunta ${currentIndex + 1} de ${questionsData.length}`;
+            
+            // Barra de progreso
+            const progress = ((currentIndex) / questionsData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}% Completado`;
+
+            // Generar botones
+            currentQ.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl transition-all duration-200 flex justify-between items-center text-base md:text-lg font-medium border-2 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer";
+                
+                // Contenido del botón
+                btn.innerHTML = `
+                    <span class="flex items-center">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 text-sm font-bold border-gray-300 text-gray-500 option-letter">
+                            ${option.id.toUpperCase()}
+                        </span>
+                        ${option.text}
+                    </span>
+                    <span class="icon-container"></span>
+                `;
+
+                btn.onclick = () => selectOption(option.id, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedId, btnElement) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const currentQ = questionsData[currentIndex];
+            const isCorrect = selectedId === currentQ.correctAnswer;
+
+            if (isCorrect) {
+                score++;
+            }
+
+            // Deshabilitar todos los botones y mostrar colores
+            const buttons = optionsContainer.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-indigo-300', 'hover:bg-indigo-50', 'cursor-pointer');
+                
+                // Encontrar el ID de este botón buscando la letra dentro
+                const letterSpan = btn.querySelector('.option-letter');
+                const optionId = letterSpan.textContent.trim().toLowerCase();
+                const iconContainer = btn.querySelector('.icon-container');
+
+                if (optionId === currentQ.correctAnswer) {
+                    // Marcar la correcta (verde)
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                    btn.classList.remove('border-gray-200');
+                    letterSpan.classList.remove('border-gray-300', 'text-gray-500');
+                    letterSpan.classList.add('border-green-500', 'bg-green-500', 'text-white');
+                    iconContainer.innerHTML = '<svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+                } else if (optionId === selectedId && !isCorrect) {
+                    // Marcar la incorrecta elegida (rojo)
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                    btn.classList.remove('border-gray-200');
+                    letterSpan.classList.remove('border-gray-300', 'text-gray-500');
+                    letterSpan.classList.add('border-red-500', 'bg-red-500', 'text-white');
+                    iconContainer.innerHTML = '<svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>';
+                } else {
+                    // Opacar las demás
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            // Mostrar explicación
+            feedbackBox.className = `mb-4 p-4 rounded-lg border ${isCorrect ? 'bg-green-50 text-green-800 border-green-200' : 'bg-blue-50 text-blue-800 border-blue-200'}`;
+            feedbackTitle.textContent = isCorrect ? '¡Correcto!' : 'Explicación:';
+            feedbackText.textContent = currentQ.explanation;
+            
+            // Texto del botón siguiente
+            const isLast = currentIndex === questionsData.length - 1;
+            nextBtn.innerHTML = `
+                ${isLast ? 'Ver Resultados' : 'Siguiente Pregunta'}
+                <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            `;
+
+            explanationPanel.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questionsData.length - 1) {
+                currentIndex++;
+                loadQuestion();
+                // Scroll arriba suave
+                quizScreen.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            quizScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+
+            const percentage = Math.round((score / questionsData.length) * 100);
+            const resultMessage = document.getElementById('result-message');
+            const resultPercentage = document.getElementById('result-percentage');
+            const resultDetail = document.getElementById('result-detail');
+            const trophyIcon = document.getElementById('trophy-icon');
+
+            let message = "";
+            if (percentage === 100) message = "¡Excelente! Dominas la teoría.";
+            else if (percentage >= 70) message = "¡Muy bien! Estás listo para defender tu proyecto.";
+            else if (percentage >= 50) message = "Bien, pero repasa los conceptos clave.";
+            else message = "Necesitas releer los apuntes de Taller.";
+
+            resultMessage.textContent = message;
+            resultPercentage.textContent = `${percentage}%`;
+            resultDetail.textContent = `Acertaste ${score} de ${questionsData.length} preguntas`;
+
+            if (percentage < 70) {
+                trophyIcon.classList.remove('text-yellow-500');
+                trophyIcon.classList.add('text-gray-400');
+            } else {
+                trophyIcon.classList.add('text-yellow-500');
+                trophyIcon.classList.remove('text-gray-400');
+            }
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            score = 0;
+            isAnswered = false;
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
